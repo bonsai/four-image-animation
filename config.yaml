@@ -1,0 +1,47 @@
+# AI Animation Pipeline Configuration
+
+# テーマ設定
+theme: "夏の冒険"
+
+# 出力設定
+output:
+  resolution:
+    width: 1080
+    height: 1920
+  fps: 24
+  duration: 90
+  format: mp4
+
+# 画像設定 (SD 1.5)
+image:
+  model: "runwayml/stable-diffusion-v1-5"
+  width: 1024
+  height: 576
+  steps: 30
+  guidance_scale: 7.5
+  sampler: "euler_a"
+
+# 動画設定 (SVD)
+video:
+  model: "stabilityai/stable-video-diffusion-img2vid-xt"
+  frames: 25
+  motion_bucket_id: 127
+  guidance_scale: 3.0
+
+# Ollama設定
+ollama:
+  model: "llama3"
+  host: "http://localhost:11434"
+
+# シーン設定
+scenes:
+  count: 4
+  duration_per_scene: 22.5
+  transition_duration: 1.0
+  transition_type: "crossfade"
+
+# ファイルパス
+paths:
+  images_dir: "images"
+  videos_dir: "videos"
+  output_file: "output.mp4"
