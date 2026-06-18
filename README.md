@@ -1,36 +1,55 @@
 # Four Image Animation
 
-4枚の画像から90秒のアニメーション動画を生成するツールです。
+Ollama + Stable Diffusion 1.5 + Stable Video Diffusion (SVD) を使った
+AI自動アニメーション生成パイプライン。
+
+4枚の「はがきサイズ」イラストを生成し、それぞれをアニメーション化して
+スマホ縦型（9:16）の90秒動画を自動生成します。
+
+## 概要
+
+```
+テーマ入力 → Ollama (ストーリー) → SD 1.5 (画像) → SVD (動画) → FFmpeg → 90秒動画
+```
 
 ## 前提条件
 
-- [FFmpeg](https://ffmpeg.org/) がインストールされていること
+- Python 3.10+
+- [FFmpeg](https://ffmpeg.org/)
+- [Ollama](https://ollama.ai/) (ローカルサーバー)
+- GPU推奨 (VRAM 8GB以上)
+
+## セットアップ
+
+```bash
+git clone https://github.com/bonsai/four-image-animation.git
+cd four-image-animation
+pip install -r requirements.txt
+ollama pull llama3
+```
 
 ## 使い方
 
-### Linux/Mac
-
 ```bash
-chmod +x animate.sh
-./animate.sh image1.png image2.png image3.png image4.png
+python main.py --theme "夏の冒険"
 ```
 
-### Windows
+## パイプライン
 
-```batch
-animate.bat image1.png image2.png image3.png image4.png
-```
+| ステップ | 出力 |
+|---------|------|
+| 1. ストーリー生成 (Ollama) | 4シーンのプロンプト + ナレーション |
+| 2. 画像生成 (SD 1.5) | はがきサイズ画像×4枚 (1024×576) |
+| 3. 動画生成 (SVD) | アニメーションクリップ×4 |
+| 4. 動画編集 (FFmpeg) | output.mp4 (90秒、1080×1920) |
 
-## 出力
+## 出力仕様
 
-- `output.mp4` - 90秒のアニメーション動画（1920x1080、30fps）
+| 項目 | 仕様 |
+|------|------|
+| 解像度 | 1080 × 1920 px (9:16) |
+| フレームレート | 24 fps |
+| 総尺 | 90秒 |
+| シーン数 | 4 |
 
-## 特徴
-
-- 各画像にフェードイン/フェードアウト効果
-- 画像は1920x1080にリサイズ（アスペクト比保持）
-- 合計90秒の動画を生成
-
-## 画像の準備
-
-`images/` フォルダにアニメーションに使用する4枚の画像を配置してください。
+詳細は [PRD.md](PRD.md) を参照。
